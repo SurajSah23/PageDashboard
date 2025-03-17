@@ -3,7 +3,13 @@ import Sidebar from "./components/Sidebar";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentDate] = useState("March 10, 2025");
+  const [isOpen, setIsOpen] = useState(false); // state to open/close dropdown
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
+
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen); // toggle the state
+  };
 
   const patients = [
     {
@@ -72,19 +78,65 @@ function App() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
         <header className="bg-white border-b">
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 py-4 space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2">
               <img
                 src="https://i.ibb.co/Xr0zFWXQ/Icon.png"
                 alt=""
                 className="w-5 h-5"
               />
-              <span className="text-gray-600">Curevention Clinic Center</span>
+              <div className="relative inline-block text-left">
+                <button
+                  className="inline-flex justify-center w-full text-gray-600 text-sm sm:text-base"
+                  onClick={toggleDropdown} // onClick toggle
+                >
+                  Curevention Clinic Center
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {isOpen && ( // Show dropdown only when isOpen = true
+                  <div className="absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                    <div className="py-1">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Option 1
+                      </a>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Option 2
+                      </a>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Option 3
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <img
@@ -98,7 +150,7 @@ function App() {
                   alt="Doctor"
                   className="w-8 h-8 rounded-full"
                 />
-                <div>
+                <div className="hidden sm:block">
                   <div className="text-sm font-medium">Dr. Suchita Gupta</div>
                   <div className="text-xs text-gray-500">General Physician</div>
                 </div>
@@ -107,14 +159,16 @@ function App() {
           </div>
         </header>
 
-        <main className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
+        {/* Main */}
+        <main className="p-4 sm:p-6 flex-1 overflow-y-auto">
+          {/* Search and Actions */}
+          <div className="flex flex-col md:flex-row items-center justify-between mb-4 space-y-4 md:space-y-0">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
                 <input
                   type="text"
                   placeholder="Search"
-                  className="pl-4 pr-10 py-2 border rounded-md w-64"
+                  className="pl-4 pr-10 py-2 border rounded-md w-full"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -125,38 +179,53 @@ function App() {
                 />
               </div>
 
-              <button className="flex items-center space-x-2 px-4 py-2 border rounded-md">
+              <button className="flex items-center space-x-2 px-4 py-2 border rounded-md w-full sm:w-auto">
                 <span>Filter</span>
               </button>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <div className="flex items-center space-x-2">
                 <button className="p-1 rounded-md hover:bg-gray-100">
                   <img src="https://i.ibb.co/vxHfz4gH/Button-1.png" alt="" />
                 </button>
-                <span className="text-sm font-medium">{currentDate}</span>
+
+                {/* Input Date */}
+                <input
+                  type="date"
+                  value={currentDate} // Pass current date state
+                  onChange={(e) => setCurrentDate(e.target.value)} // Update date
+                  className="border rounded-md px-2 py-1"
+                />
               </div>
+
               <select className="border rounded-md px-3 py-2">
                 <option>Today</option>
               </select>
-              <img src="https://i.ibb.co/KcpRP6nD/Button.png" alt=""/>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center space-x-2">
-                <span className="text-lg"><img src="https://i.ibb.co/svqjVrdw/Icon-11.png" alt="" /></span>
+
+              <img src="https://i.ibb.co/KcpRP6nD/Button.png" alt="" />
+
+              <button className="border border-blue-40 text-black px-4 py-2 rounded-md flex items-center space-x-2 w-full sm:w-auto">
+                <img
+                  src="https://i.ibb.co/svqjVrdw/Icon-11.png"
+                  alt=""
+                  className="w-4 h-4"
+                />
                 <span>Add New Patient</span>
               </button>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow">
-            <div className="flex items-center px-6 py-2 ">
+          {/* Patients Table */}
+          <div className="bg-white rounded-lg shadow overflow-x-auto">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center px-4 sm:px-6 py-4 space-y-2 sm:space-y-0 sm:space-x-4">
               <div className="flex space-x-2 items-center">
                 <span className="font-medium">Patient&apos;s</span>
                 <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
-                  8
+                  {patients.length}
                 </span>
               </div>
-              <div className="ml-4 flex space-x-2 items-center">
+              <div className="flex space-x-2 items-center">
                 <span className="text-gray-500">Draft</span>
                 <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2 py-0.5 rounded">
                   6
@@ -164,44 +233,52 @@ function App() {
               </div>
             </div>
 
-            <table className="w-full">
-              <thead>
-                <tr className="text-left text-sm">
-                  <th className="px-6 py-2">PID ⇅</th>
-                  <th className="px-6 py-2">Name ⇅</th>
-                  <th className="px-6 py-2 whitespace-nowrap">
+            <table className="min-w-full text-sm">
+              <thead className="bg-gray-100">
+                <tr className="text-left">
+                  <th className="px-4 sm:px-6 py-2">PID ⇅</th>
+                  <th className="px-4 sm:px-6 py-2">Name ⇅</th>
+                  <th className="px-4 sm:px-6 py-2 whitespace-nowrap">
                     Date of Birth ⇅
                   </th>
-                  <th className="px-6 py-2 whitespace-nowrap">Gender ⇅</th>
-                  <th className="px-6 py-2">Mobile ⇅</th>
-                  <th className="px-6 py-2">Email ⇅</th>
-                  <th className="px-6 py-2 whitespace-nowrap">
+                  <th className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                    Gender ⇅
+                  </th>
+                  <th className="px-4 sm:px-6 py-2">Mobile ⇅</th>
+                  <th className="px-4 sm:px-6 py-2">Email ⇅</th>
+                  <th className="px-4 sm:px-6 py-2 whitespace-nowrap">
                     Last Appointment ⇅
                   </th>
-                  <th className="px-6 py-2">Action</th>
+                  <th className="px-4 sm:px-6 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {patients.map((patient, index) => (
-                  <tr 
-                    key={patient.pid} 
-                    className={` hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-500'}`}
+                  <tr
+                    key={patient.pid}
+                    className={`hover:bg-gray-50 ${
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    }`}
                   >
-                    <td className="px-6 py-2">{patient.pid}</td>
-                    <td className="px-6 py-2 whitespace-nowrap">
+                    <td className="px-4 sm:px-6 py-2">{patient.pid}</td>
+                    <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
                       {patient.name}
                     </td>
-                    <td className="px-6 py-2 whitespace-nowrap">
+                    <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
                       {patient.dob}
                     </td>
-                    <td className="px-6 py-2">{patient.gender}</td>
-                    <td className="px-6 py-2 whitespace-nowrap">
+                    <td className="px-4 sm:px-6 py-2">{patient.gender}</td>
+                    <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
                       {patient.mobile}
                     </td>
-                    <td className="px-6 py-2">{patient.email}</td>
-                    <td className="px-6 py-2">{patient.lastAppointment}</td>
-                    <td className="px-6 py-2">
-                      <button className="text-gray-400 hover:text-gray-600"></button>
+                    <td className="px-4 sm:px-6 py-2">{patient.email}</td>
+                    <td className="px-4 sm:px-6 py-2">
+                      {patient.lastAppointment}
+                    </td>
+                    <td className="px-4 sm:px-6 py-2">
+                      <button className="text-gray-400 hover:text-gray-600">
+                        ...
+                      </button>
                     </td>
                   </tr>
                 ))}
