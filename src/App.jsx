@@ -277,7 +277,7 @@ function App() {
                     </td>
                     <td className="px-4 sm:px-6 py-2">
                       <button className="text-gray-400 hover:text-gray-600">
-                        ...
+                              <img src="https://i.ibb.co/2YmbdV2t/Icon-1.png" alt="" />
                       </button>
                     </td>
                   </tr>
